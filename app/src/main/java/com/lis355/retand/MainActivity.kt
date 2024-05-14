@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,18 +50,13 @@ class MainActivity : ComponentActivity() {
         this.settings = Settings(this)
 
         setContent {
-            var urlSetting by remember { mutableStateOf(this.settings.serverUrl) }
-            val getUrlSetting = { urlSetting }
-            val setUrlSetting: (String) -> Unit = {
-                this.settings.serverUrl = urlSetting
-
-                urlSetting = it
-            }
+//            val getUrlSetting = { this.settings.serverUrl }
+//            val setUrlSetting:
 
             RetAndTheme {
                 App(
-                    getUrlSetting = getUrlSetting,
-                    setUrlSetting = setUrlSetting
+                    getUrlSetting = { this.settings.serverUrl },
+                    setUrlSetting = { this.settings.serverUrl = it }
                 )
             }
         }
@@ -68,19 +64,26 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun App(getUrlSetting: () -> String, setUrlSetting: (String) -> Unit ) {
+fun App(getUrlSetting: () -> String, setUrlSetting: (String) -> Unit) {
+    var urlSetting: String by remember { mutableStateOf(getUrlSetting()) }
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-       TextField(
-            value = getUrlSetting(),
-            onValueChange = setUrlSetting,
+        TextField(
+            label = { Text("Telegram Bot Token") },
+            value = urlSetting,
+            onValueChange = {
+                urlSetting = it
+
+                setUrlSetting(urlSetting)
+            },
             modifier = Modifier
                 .padding(all = 5.dp)
-       )
+        )
     }
 }
 
