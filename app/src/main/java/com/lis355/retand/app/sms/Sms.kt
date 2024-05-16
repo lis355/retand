@@ -1,21 +1,8 @@
-package com.lis355.retand
+package com.lis355.retand.app.sms
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.provider.Telephony
+import com.lis355.retand.app.network.TelegramUserMessagesSendable
 
 class Sms(val address: String, val text: String)
-
-class SmsBroadcastReceiver(val smsHandler: (Sms) -> Unit) : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        for (message in Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
-            if (message.originatingAddress != null &&
-                message.messageBody != null
-            ) smsHandler(Sms(message.originatingAddress!!, message.messageBody))
-        }
-    }
-}
 
 class SmsProcessor(private val telegramUserMessagesSendable: TelegramUserMessagesSendable) {
     fun processSms(sms: Sms) {

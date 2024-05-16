@@ -1,4 +1,4 @@
-package com.lis355.retand
+package com.lis355.retand.app.settings
 
 import android.content.Context
 import android.content.SharedPreferences
